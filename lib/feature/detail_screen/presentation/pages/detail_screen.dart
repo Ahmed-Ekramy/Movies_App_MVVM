@@ -112,7 +112,7 @@ class DetailScreen extends StatelessWidget {
                           height: 20,
                         ),
                         const Text(
-                          "Discription",
+                          "Description",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
