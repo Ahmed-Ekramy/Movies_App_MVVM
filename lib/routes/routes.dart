@@ -22,7 +22,7 @@ class AppRoutes {
       case Routes.newScreen:
         return MaterialPageRoute(builder: (context) => const NewScreen());
       case Routes.topRated:
-        return MaterialPageRoute(builder: (context) => const TopRated());
+        return MaterialPageRoute(builder: (context) =>  TopRated());
       // case Routes.detailScreen:
       //
       //   return MaterialPageRoute(builder: (context) =>  DetailScreen());

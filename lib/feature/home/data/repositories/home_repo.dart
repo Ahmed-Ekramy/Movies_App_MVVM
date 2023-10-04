@@ -8,7 +8,8 @@ import '../models/top_rated.dart';
 
 abstract class HomeRepo{
 Future<Either<Failures,PopularModel>> getPop();
-Future<Either<Failures,UpComingModel>> getUpComing();
-Future<Either<Failures,TopRatedModel>> getTopRated();
+Future<Either<Failures,PopularModel>> getSearch({required String name});
+Future<Either<Failures,UpComingModel>> getUpComing({required  int numPage});
+Future<Either<Failures,TopRatedModel>> getTopRated({required  int numPage});
 
 }

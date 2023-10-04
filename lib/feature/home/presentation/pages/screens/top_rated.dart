@@ -8,7 +8,6 @@ import '../../manager/layout_state.dart';
 import '../../widgets/top_rated_item.dart';
 
 class TopRated extends StatelessWidget {
-  const TopRated({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,4 +43,5 @@ class TopRated extends StatelessWidget {
       ),
     );
   }
+
 }

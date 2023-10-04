@@ -40,7 +40,7 @@ class DetailScreen extends StatelessWidget {
                               child: CircularProgressIndicator(),
                             ),
                             errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                                Center(child: const Icon(Icons.error)),
                           ),
                         ),
                         Text(
@@ -80,7 +80,7 @@ class DetailScreen extends StatelessWidget {
                           height: 15,
                         ),
                         SizedBox(
-                          height: 40,
+                          height: 100,
                           child: ListView.builder(
                             itemCount: DetailCubit.get(context)
                                 .detailModel

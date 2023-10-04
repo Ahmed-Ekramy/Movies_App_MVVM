@@ -26,15 +26,29 @@ class HomeRepoImpl extends HomeRepo {
       return left(ServerFailure(e.toString()));
     }
   }
-
   @override
-  Future<Either<Failures, UpComingModel>> getUpComing() async {
+  Future<Either<Failures, PopularModel>> getSearch({required String name}) async {
     Dio dio = Dio();
     try {
       var response = await dio.get(
-          "$baseUrl/upcoming?$apiKey");
+          "https://api.themoviedb.org/3/search/movie?$apiKey&query=$name");
+      PopularModel popularModel = PopularModel.fromJson(response.data);
+      return right(popularModel);
+    } catch (e) {
+      if (e is DioException) {
+        return left(ServerFailure.fromDiorError(e));
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failures, UpComingModel>> getUpComing( {required  int numPage}) async {
+    Dio dio = Dio();
+    try {
+      var response = await dio.get(
+          "$baseUrl/upcoming?$apiKey&page=$numPage");
       UpComingModel upComingModel=UpComingModel.fromJson(response.data);
-      print(upComingModel.results?[0].backdropPath);
       return Right(upComingModel);
     } catch (e) {
       if (e is DioException) {
@@ -46,11 +60,11 @@ class HomeRepoImpl extends HomeRepo {
     }
 
   @override
-  Future<Either<Failures, TopRatedModel>> getTopRated() async{
+  Future<Either<Failures, TopRatedModel>> getTopRated({required  int numPage}) async{
     Dio dio = Dio();
 
     try {
-    var response=await dio.get(  "$baseUrl/top_rated?$apiKey");
+    var response=await dio.get(  "$baseUrl/top_rated?$apiKey&page=$numPage");
     TopRatedModel topRatedModel= TopRatedModel.fromJson(response.data);
     return Right(topRatedModel);
   }catch(e){

@@ -48,7 +48,7 @@ class NewItem extends StatelessWidget {
                               child: CircularProgressIndicator(),
                             ),
                             errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                            Center(child: const Icon(Icons.error)),
                           ),),
                         Positioned(
                           top:-10,
@@ -63,7 +63,7 @@ class NewItem extends StatelessWidget {
                         const SizedBox(width: 20,),
                         Text("${upComingList.voteAverage}",style: const TextStyle(fontSize: 20),)],),
                     const SizedBox(height: 10,),
-                    Text("${upComingList.title}",style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),maxLines: 2,overflow: TextOverflow.ellipsis),
+                    Text("${upComingList.title}",style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),maxLines: 1,overflow: TextOverflow.ellipsis),
                     const SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,

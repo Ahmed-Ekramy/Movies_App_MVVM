@@ -8,6 +8,16 @@ abstract class LayoutStates {}
 
 class LayoutInitialState extends LayoutStates {}
 class ChangeNavState extends LayoutStates {}
+//////////////////////////
+/////////////////////////////
+class PaginationLoadingState extends LayoutStates {}
+class PaginationFailureState extends LayoutStates {
+  final String errorMessage;
+  PaginationFailureState(this.errorMessage);
+}
+///////////////////////////////
+/////////////////////////////////////
+
 
 class PopularLoadingState extends LayoutStates {}
 class PopularSuccessesState extends LayoutStates {
@@ -22,6 +32,8 @@ class PopularFailureState extends LayoutStates {
 
 //////////////////////////////////////
 /////////////////////////////////////
+
+
 class UpComingLoadingState extends LayoutStates {}
 class UpComingSuccessesState extends LayoutStates {
   UpComingSuccessesState(this.upComingModel);
@@ -41,4 +53,15 @@ class TopRatedSuccessesState extends LayoutStates {
 class TopRatedFailureState extends LayoutStates {
   final String errorMessage;
   TopRatedFailureState(this.errorMessage);
+}
+//////////////////////////////////////
+/////////////////////////////////////
+class SearchLoadingState extends LayoutStates {}
+class SearchSuccessesState extends LayoutStates {
+  SearchSuccessesState(this.popularModel);
+PopularModel popularModel;
+}
+class SearchFailureState extends LayoutStates {
+  final String errorMessage;
+  SearchFailureState(this.errorMessage);
 }

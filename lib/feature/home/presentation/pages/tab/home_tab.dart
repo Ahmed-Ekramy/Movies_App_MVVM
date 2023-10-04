@@ -26,9 +26,10 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LayoutCubit, LayoutStates>(
-      listener: (context, state) {},
+    return BlocBuilder<LayoutCubit, LayoutStates>(
+
       builder: (context, state) {
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: SingleChildScrollView(
@@ -61,7 +62,7 @@ class _HomeTabState extends State<HomeTab> {
                     disableGesture: true,
                     items: LayoutCubit.get(context)
                         .popList
-                        ?.map(
+                        .map(
                           (e) => Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 10.0),
@@ -177,11 +178,13 @@ class _HomeTabState extends State<HomeTab> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => InkWell(
                         onTap: () {
-                          Navigator.push(context,MaterialPageRoute(builder: (context) {
-                          return DetailScreen(LayoutCubit.get(context)
-                              .upComingList[index]
-                              .id);
-                          },));
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return DetailScreen(LayoutCubit.get(context)
+                                  .upComingList[index]
+                                  .id);
+                            },
+                          ));
                         },
                         child: NewItem(
                             LayoutCubit.get(context).upComingList[index])),
@@ -238,11 +241,13 @@ class _HomeTabState extends State<HomeTab> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return DetailScreen(LayoutCubit.get(context)
-                              .topRatedList[index]
-                              .id);
-                        },));
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return DetailScreen(LayoutCubit.get(context)
+                                .topRatedList[index]
+                                .id);
+                          },
+                        ));
                       },
                       child: TopRatedItem(
                           LayoutCubit.get(context).topRatedList[index]),

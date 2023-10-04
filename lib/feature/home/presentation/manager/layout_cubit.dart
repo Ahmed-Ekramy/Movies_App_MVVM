@@ -21,7 +21,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
   List<Results> popList = [];
   List<ResultsUpComing> upComingList = [];
   List<ResultsTopRated> topRatedList = [];
-
+int numPage=50;
 
   void changeNav(value) {
     currentIndex = value;
@@ -34,6 +34,10 @@ class LayoutCubit extends Cubit<LayoutStates> {
     BrowseTab(),
     WatchListTab()
   ];
+
+  late ScrollController scrollController;
+
+
   void getPop() async {
     emit(PopularLoadingState());
     var result = await homeRepoImpl.getPop();
@@ -42,22 +46,41 @@ class LayoutCubit extends Cubit<LayoutStates> {
       emit(PopularSuccessesState(r));
     });
   }
-  void getUpComing() async {
-    emit(PopularLoadingState());
-    var result = await homeRepoImpl.getUpComing();
-    result.fold((l) => emit(UpComingFailureState(l.message)),
+  void getSearch() async {
+    emit(SearchLoadingState());
+    var result = await homeRepoImpl.getPop();
+    result.fold((l) => emit(SearchFailureState(l.message)), (r) {
+      popList = r.results!;
+      emit(SearchSuccessesState(r));
+    });
+  }
+  void getUpComing({ bool fromLoading=false}) async {
+    if(fromLoading){
+       emit(PaginationLoadingState());
+    }else{
+      emit(UpComingLoadingState());
+    }
+    var result = await homeRepoImpl.getUpComing(numPage: numPage);
+    result.fold((l) {
+        emit(UpComingFailureState(l.message));
+    },
         (r) {
-          upComingList=r.results??[];
-          emit(UpComingSuccessesState(r));
+      if(r.results!.isNotEmpty){
+        numPage++;
+        upComingList=r.results??[];
+        emit(UpComingSuccessesState(r));
+      }
+
         });
   }
   void topRated() async {
     emit(PopularLoadingState());
-    var result = await homeRepoImpl.getTopRated();
+    var result = await homeRepoImpl.getTopRated(numPage: numPage);
     result.fold((l) => emit(TopRatedFailureState(l.message)),
         (r) {
           topRatedList=r.results??[];
           emit(TopRatedSuccessesState(r));
         });
   }
+
 }
