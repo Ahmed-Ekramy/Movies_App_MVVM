@@ -38,7 +38,7 @@ class NewScreen extends StatelessWidget {
                       return true;
                     },
                     child: GridView.count(
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         crossAxisCount: 2,
                         mainAxisSpacing: 2,
                         crossAxisSpacing: 0,
@@ -54,7 +54,7 @@ class NewScreen extends StatelessWidget {
                   );
             }
             else{
-              return Center(child: Text("UnHandel"),);
+              return const Center(child: Text("UnHandel"),);
             }
           },
         ),
@@ -69,8 +69,11 @@ class NewScreen extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     ),
                   );
+                }else if(state is PaginationFailureState){
+                  return Text(state.errorMessage);
+
                 } else {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
               },
 

@@ -8,38 +8,66 @@ import '../../manager/layout_state.dart';
 import '../../widgets/top_rated_item.dart';
 
 class TopRated extends StatelessWidget {
-
+  const TopRated({super.key});
   @override
   Widget build(BuildContext context) {
     return  BlocProvider(
       create: (context) =>
       LayoutCubit(HomeRepoImpl())
         ..topRated(),
-      child: BlocConsumer<LayoutCubit, LayoutStates>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
-        builder: (context, state) {
-          return Scaffold(
-            body: GridView
-                .count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 2,
-                crossAxisSpacing: 0,
-                childAspectRatio: 1.1 / 2.3,
-                children: List.generate(LayoutCubit.get(context)
-                    .topRatedList
-                    .length, (index)
-                =>Padding(
-                  padding:  EdgeInsets.symmetric(vertical: 8.0),
-                  child:TopRatedItem( LayoutCubit.get(context).topRatedList[index]),
-                ),
-                )
+      child: Scaffold(
+        body: BlocBuilder<LayoutCubit, LayoutStates>(
+        //  buildWhen: (previous, current) => current is! PaginationLoadingState&&current is !PaginationFailureState,
+          builder: (context, state) {
+            return  NotificationListener<ScrollUpdateNotification>(
+                onNotification: (notification) {
+                  if(notification.metrics.pixels==notification.metrics.maxScrollExtent){
+                    LayoutCubit.get(context).topRated(fromLoading: true);
+                  }
+                  return true;
+                },
+                child: GridView
+                    .count(
+                  physics: BouncingScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 2,
+                    crossAxisSpacing: 0,
+                    childAspectRatio: 1.1 / 2.3,
+                    children: List.generate(LayoutCubit.get(context)
+                        .topRatedList
+                        .length, (index)
+                    =>Padding(
+                      padding:  EdgeInsets.symmetric(vertical: 8.0),
+                      child:TopRatedItem( LayoutCubit.get(context).topRatedList[index]),
+                    ),
+                    )
 
-            )
-            ,
-          );
-        },
+                ),
+
+            );
+          },
+        ),
+        bottomNavigationBar: SizedBox(
+          height: 60,
+          child: BlocBuilder<LayoutCubit, LayoutStates>(
+         //   buildWhen: (previous, current) => current is PaginationLoadingState||current is TopRatedSuccessesState||current is PaginationFailureState,
+            builder: (context, state) {
+              if (state is PaginationLoadingState) {
+                return const SafeArea(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }else if(state is PaginationFailureState){
+                return Text(state.errorMessage);
+
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+
+          ),
+        ),
       ),
     );
   }

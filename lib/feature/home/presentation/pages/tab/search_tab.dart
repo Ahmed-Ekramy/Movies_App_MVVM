@@ -39,7 +39,7 @@ class SearchTab extends StatelessWidget {
                           ),
                           borderSide: BorderSide(color: Colors.grey),
                         )),
-                    onSubmitted: (value) {
+                    onChanged: (value) {
                       LayoutCubit.get(context).getSearch(name: value);
                     }),
                 const SizedBox(

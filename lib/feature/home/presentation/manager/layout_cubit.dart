@@ -60,15 +60,15 @@ int numPage=1;
       emit(UpComingLoadingState());
     }
     var result = await homeRepoImpl.getUpComing(numPage: numPage);
-
     result.fold((l) {
+      if(fromLoading){
+        emit(PaginationFailureState(l.message));
+      }else{
         emit(UpComingFailureState(l.message));
+      }
     },
         (r) {
-
           if(r.results!.isNotEmpty){
-            print('qq');
-
             numPage++;
         upComingList.addAll( r.results ?? []);
         emit(UpComingSuccessesState(r));
@@ -76,14 +76,21 @@ int numPage=1;
 
         });
   }
-  void topRated() async {
-    emit(PopularLoadingState());
+  void topRated({bool fromLoading=false}) async {
+    if(fromLoading){
+      emit(PaginationLoadingState());
+    }else{
+      emit(TopRatedLoadingState());
+    }
     var result = await homeRepoImpl.getTopRated(numPage: numPage);
     result.fold((l) => emit(TopRatedFailureState(l.message)),
         (r) {
-          topRatedList=r.results??[];
-          emit(TopRatedSuccessesState(r));
-        });
+         if(r.results!.isNotEmpty) {
+        numPage++;
+        topRatedList.addAll(r.results ?? []);
+        emit(TopRatedSuccessesState(r));
+      }
+    });
   }
 
 }
