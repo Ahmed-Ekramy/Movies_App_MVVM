@@ -46,17 +46,31 @@ class SearchTab extends StatelessWidget {
                   height: 20,
                 ),
                 Expanded(
-                  child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                     return   Padding(
-                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                       child: SearchItems(LayoutCubit.get(context).searchList[index]),
-                     );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const Divider(color: Colors.grey, thickness: 2,endIndent: 40,indent: 40),
-                      itemCount: LayoutCubit.get(context).searchList.length),
+                  child: NotificationListener<ScrollUpdateNotification>(
+                    onNotification: (notification) {
+                      if (notification.metrics.pixels ==
+                              notification.metrics.maxScrollExtent &&
+                          notification is ScrollUpdateNotification) {
+                         LayoutCubit.get(context).getSearch(fromLoading: true);
+                      }
+                      return true;
+                    },
+                    child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: SearchItems(
+                                LayoutCubit.get(context).searchList[index]),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Divider(
+                            color: Colors.grey,
+                            thickness: 2,
+                            endIndent: 40,
+                            indent: 40),
+                        itemCount: LayoutCubit.get(context).searchList.length),
+                  ),
                 ),
               ],
             ),
@@ -66,4 +80,3 @@ class SearchTab extends StatelessWidget {
     );
   }
 }
-

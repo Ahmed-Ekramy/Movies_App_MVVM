@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app1/feature/home/data/repositories/homeRepoImp.dart';
 import 'package:movies_app1/feature/home/presentation/manager/layout_cubit.dart';
 import 'package:movies_app1/feature/home/presentation/widgets/new_item.dart';
+import '../../../../detail_screen/presentation/pages/detail_screen.dart';
 import '../../manager/layout_state.dart';
 
 class NewScreen extends StatelessWidget {
@@ -47,8 +48,18 @@ class NewScreen extends StatelessWidget {
                           LayoutCubit.get(context).upComingList.length,
                           (index) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: NewItem(
-                                LayoutCubit.get(context).upComingList[index]),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return DetailScreen(LayoutCubit.get(context)
+                                        .upComingList[index].id);
+                                  },
+                                ));
+                              },
+                              child: NewItem(
+                                  LayoutCubit.get(context).upComingList[index]),
+                            ),
                           ),
                         )),
                   );

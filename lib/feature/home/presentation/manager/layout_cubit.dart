@@ -22,7 +22,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
   List<Results> searchList = [];
   List<ResultsUpComing> upComingList = [];
   List<ResultsTopRated> topRatedList = [];
-int numPage=1;
+  int numPage = 1;
 
   void changeNav(value) {
     currentIndex = value;
@@ -36,6 +36,7 @@ int numPage=1;
     WatchListTab()
   ];
   late ScrollController scrollController;
+
   void getPop() async {
     emit(PopularLoadingState());
     var result = await homeRepoImpl.getPop();
@@ -44,53 +45,66 @@ int numPage=1;
       emit(PopularSuccessesState(r));
     });
   }
-  void getSearch({String? name}) async {
-    emit(SearchLoadingState());
-    var result = await homeRepoImpl.getSearch(name: name??"");
-    result.fold((l) => emit(SearchFailureState(l.message)), (r) {
-      searchList = r.results!;
-      print(searchList.length);
-      emit(SearchSuccessesState(r));
+
+  void getSearch({bool fromLoading = false, String? name}) async {
+    if (fromLoading) {
+      emit(PaginationLoadingState());
+    } else {
+      emit(SearchLoadingState());
+    }
+    var result =
+        await homeRepoImpl.getSearch(name: name ?? "", numPage: numPage);
+    result.fold((l) {
+      if (fromLoading) {
+        emit(PaginationFailureState(l.message));
+      } else {
+        emit(SearchFailureState(l.message));
+      }
+
+    }, (r) {
+      if (r.results!.isNotEmpty) {
+        numPage++;
+        searchList.addAll(r.results!);
+        emit(SearchSuccessesState(r));
+      }
     });
   }
-  void getUpComing({ bool fromLoading=false}) async {
-    if(fromLoading){
-       emit(PaginationLoadingState());
-    }else{
+
+  void getUpComing({bool fromLoading = false}) async {
+    if (fromLoading) {
+      emit(PaginationLoadingState());
+    } else {
       emit(UpComingLoadingState());
     }
     var result = await homeRepoImpl.getUpComing(numPage: numPage);
     result.fold((l) {
-      if(fromLoading){
+      if (fromLoading) {
         emit(PaginationFailureState(l.message));
-      }else{
+      } else {
         emit(UpComingFailureState(l.message));
       }
-    },
-        (r) {
-          if(r.results!.isNotEmpty){
-            numPage++;
-        upComingList.addAll( r.results ?? []);
+    }, (r) {
+      if (r.results!.isNotEmpty) {
+        numPage++;
+        upComingList.addAll(r.results ?? []);
         emit(UpComingSuccessesState(r));
       }
-
-        });
+    });
   }
-  void topRated({bool fromLoading=false}) async {
-    if(fromLoading){
+
+  void topRated({bool fromLoading = false}) async {
+    if (fromLoading) {
       emit(PaginationLoadingState());
-    }else{
+    } else {
       emit(TopRatedLoadingState());
     }
     var result = await homeRepoImpl.getTopRated(numPage: numPage);
-    result.fold((l) => emit(TopRatedFailureState(l.message)),
-        (r) {
-         if(r.results!.isNotEmpty) {
+    result.fold((l) => emit(TopRatedFailureState(l.message)), (r) {
+      if (r.results!.isNotEmpty) {
         numPage++;
         topRatedList.addAll(r.results ?? []);
         emit(TopRatedSuccessesState(r));
       }
     });
   }
-
 }

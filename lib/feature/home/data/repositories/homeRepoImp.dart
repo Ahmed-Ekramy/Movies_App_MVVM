@@ -27,11 +27,12 @@ class HomeRepoImpl extends HomeRepo {
     }
   }
   @override
-  Future<Either<Failures, PopularModel>> getSearch({required String name}) async {
+  Future<Either<Failures, PopularModel>> getSearch({required String name, int? numPage}) async {
     Dio dio = Dio();
     try {
       var response = await dio.get(
-          "https://api.themoviedb.org/3/search/movie?$apiKey&query=$name");
+
+          "https://api.themoviedb.org/3/search/movie?$apiKey&query=$name&page=${numPage??0}");
       PopularModel popularModel = PopularModel.fromJson(response.data);
       print(popularModel.results?[1].title);
       return right(popularModel);
