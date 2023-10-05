@@ -54,27 +54,27 @@ class HomeLayout extends StatelessWidget {
                     items: const [
                       BottomNavigationBarItem(
                           backgroundColor: Colors.transparent,
-                          icon: Icon(Icons.home_filled, size: 44),
+                          icon: Icon(Icons.home_filled, size: 30),
                           label: ""),
                       BottomNavigationBarItem(
                           backgroundColor: Colors.transparent,
                           icon: Icon(
                             Icons.search_rounded,
-                            size: 44,
+                            size: 30,
                           ),
                           label: ""),
                       BottomNavigationBarItem(
                           backgroundColor: Colors.transparent,
                           icon: Icon(
                             Icons.browser_updated,
-                            size: 44,
+                            size: 30,
                           ),
                           label: ""),
                       BottomNavigationBarItem(
                           backgroundColor: Colors.transparent,
                           icon: Icon(
                             Icons.bookmark_added,
-                            size: 44,
+                            size: 30,
                           ),
                           label: ""),
                     ]),
