@@ -6,6 +6,6 @@ import 'core/bloc_observsr.dart';
 
 void main() {
   Bloc.observer = MyBlocObserver();
-  runApp( const Movies());
+  runApp(  Movies());
 }
 

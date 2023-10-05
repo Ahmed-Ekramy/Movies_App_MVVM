@@ -33,6 +33,7 @@ class HomeRepoImpl extends HomeRepo {
       var response = await dio.get(
           "https://api.themoviedb.org/3/search/movie?$apiKey&query=$name");
       PopularModel popularModel = PopularModel.fromJson(response.data);
+      print(popularModel.results?[1].title);
       return right(popularModel);
     } catch (e) {
       if (e is DioException) {

@@ -19,9 +19,10 @@ class LayoutCubit extends Cubit<LayoutStates> {
   int currentIndex = 0;
 
   List<Results> popList = [];
+  List<Results> searchList = [];
   List<ResultsUpComing> upComingList = [];
   List<ResultsTopRated> topRatedList = [];
-int numPage=50;
+int numPage=1;
 
   void changeNav(value) {
     currentIndex = value;
@@ -34,10 +35,7 @@ int numPage=50;
     BrowseTab(),
     WatchListTab()
   ];
-
   late ScrollController scrollController;
-
-
   void getPop() async {
     emit(PopularLoadingState());
     var result = await homeRepoImpl.getPop();
@@ -46,11 +44,12 @@ int numPage=50;
       emit(PopularSuccessesState(r));
     });
   }
-  void getSearch() async {
+  void getSearch({String? name}) async {
     emit(SearchLoadingState());
-    var result = await homeRepoImpl.getPop();
+    var result = await homeRepoImpl.getSearch(name: name??"");
     result.fold((l) => emit(SearchFailureState(l.message)), (r) {
-      popList = r.results!;
+      searchList = r.results!;
+      print(searchList.length);
       emit(SearchSuccessesState(r));
     });
   }
@@ -61,13 +60,17 @@ int numPage=50;
       emit(UpComingLoadingState());
     }
     var result = await homeRepoImpl.getUpComing(numPage: numPage);
+
     result.fold((l) {
         emit(UpComingFailureState(l.message));
     },
         (r) {
-      if(r.results!.isNotEmpty){
-        numPage++;
-        upComingList=r.results??[];
+
+          if(r.results!.isNotEmpty){
+            print('qq');
+
+            numPage++;
+        upComingList.addAll( r.results ?? []);
         emit(UpComingSuccessesState(r));
       }
 

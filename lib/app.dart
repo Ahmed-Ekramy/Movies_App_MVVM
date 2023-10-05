@@ -6,24 +6,27 @@ import 'feature/home/data/repositories/homeRepoImp.dart';
 import 'feature/home/presentation/manager/layout_cubit.dart';
 
 class Movies extends StatelessWidget {
-  const Movies({super.key});
-
+  String? value ;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => LayoutCubit(HomeRepoImpl())..getPop()..getUpComing()..topRated(),
+          create: (context) => LayoutCubit(HomeRepoImpl())
+            ..getPop()
+            ..getUpComing()
+            ..topRated(),
         )
       ],
       child: MaterialApp(
         theme: ThemeData.dark()
-            .copyWith(scaffoldBackgroundColor: Color(0xFF15141F)),
+            .copyWith(scaffoldBackgroundColor: const Color(0xFF15141F)),
         debugShowCheckedModeBanner: false,
         initialRoute: "/",
         onGenerateRoute: (settings) => AppRoutes.onGenrate(settings),
       ),
     );
   }
+
 }
