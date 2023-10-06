@@ -7,6 +7,7 @@ import 'package:movies_app1/feature/home/presentation/pages/tab/home_tab.dart';
 import 'package:movies_app1/feature/home/presentation/pages/tab/search_tab.dart';
 import 'package:movies_app1/feature/home/presentation/pages/tab/watch_list.dart';
 
+import '../../data/models/discover_model.dart';
 import '../../data/models/upcoming_model.dart';
 import '../../data/models/pop_model.dart';
 import '../../data/repositories/homeRepoImp.dart';
@@ -24,6 +25,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
   List<ResultsUpComing> upComingList = [];
   List<ResultsTopRated> topRatedList = [];
   List<Genres> genresList = [];
+  List<ResultsDiscover> discoverList = [];
   int numPage = 1;
   int selectedInex = 0;
 
@@ -32,11 +34,11 @@ class LayoutCubit extends Cubit<LayoutStates> {
     emit(ChangeNavState());
   }
 
-  List<Widget> tabs = const [
-    HomeTab(),
-    SearchTab(),
+  List<Widget> tabs =  [
+    const HomeTab(),
+    const SearchTab(),
     BrowseTab(),
-    WatchListTab()
+    const WatchListTab()
   ];
   late ScrollController scrollController;
 
@@ -110,7 +112,15 @@ class LayoutCubit extends Cubit<LayoutStates> {
     result.fold((l) => emit(GenresFailureState(l.message)),
         (r) {
           genresList=r.genres??[];
+          print(genresList[0].id);
           emit(GenresSuccessesState(r));
         });
+  }
+  void getDiscover({int? genresId})async{
+    var result=await homeRepoImpl.getDiscover(numPage: numPage, genresId: genresId??0);
+    result.fold((l) => emit(DiscoverFailureState(l.message)), (r) {
+      discoverList=r.results!;
+      emit(DiscoverSuccessesState(r));
+    });
   }
 }

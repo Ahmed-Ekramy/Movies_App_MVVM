@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:movies_app1/core/failure.dart';
+import 'package:movies_app1/feature/home/data/models/discover_model.dart';
 import 'package:movies_app1/feature/home/data/models/list_model.dart';
 import 'package:movies_app1/feature/home/data/models/top_rated.dart';
 import 'package:movies_app1/feature/home/data/models/upcoming_model.dart';
@@ -89,6 +90,22 @@ class HomeRepoImpl extends HomeRepo {
     }catch(e){
      if (e is DioException) {
        return left(ServerFailure.fromDiorError(e));
+     }
+     return left(ServerFailure(e.toString()));
+   }
+  }
+
+  @override
+  Future<Either<Failures, DiscoverModel>> getDiscover({required int numPage,required int genresId})async {
+    Dio dio= Dio();
+   try{
+     var response=await dio.get("$baseUrl?$apiKey&with_genres=$genresId&page=$numPage");
+     DiscoverModel discoverModel=DiscoverModel.fromJson(response.data);
+     print(discoverModel.results?[0].id);
+     return Right(discoverModel);
+   }catch(e){
+     if(e is DioException){
+       return left((ServerFailure.fromDiorError(e)));
      }
      return left(ServerFailure(e.toString()));
    }

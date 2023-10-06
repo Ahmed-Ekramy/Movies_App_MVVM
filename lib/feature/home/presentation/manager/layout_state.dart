@@ -1,3 +1,4 @@
+import 'package:movies_app1/feature/home/data/models/discover_model.dart';
 import 'package:movies_app1/feature/home/data/models/pop_model.dart';
 
 import '../../data/models/list_model.dart';
@@ -100,4 +101,20 @@ class GenresFailureState extends LayoutStates {
   final String errorMessage;
 
   GenresFailureState(this.errorMessage);
+}
+
+////////////////////////////////////
+/////////////////////////////////////
+class DiscoverLoadingState extends LayoutStates {}
+
+class DiscoverSuccessesState extends LayoutStates {
+  DiscoverSuccessesState(this.discoverModel);
+
+  DiscoverModel discoverModel;
+}
+
+class DiscoverFailureState extends LayoutStates {
+  final String errorMessage;
+
+  DiscoverFailureState(this.errorMessage);
 }
