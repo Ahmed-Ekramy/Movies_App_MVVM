@@ -66,7 +66,7 @@ class HomeLayout extends StatelessWidget {
                       BottomNavigationBarItem(
                           backgroundColor: Colors.transparent,
                           icon: Icon(
-                            Icons.browser_updated,
+                            Icons.category_outlined,
                             size: 30,
                           ),
                           label: ""),

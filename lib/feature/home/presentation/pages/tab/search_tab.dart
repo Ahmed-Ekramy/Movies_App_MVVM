@@ -51,7 +51,7 @@ class SearchTab extends StatelessWidget {
                       if (notification.metrics.pixels ==
                               notification.metrics.maxScrollExtent &&
                           notification is ScrollUpdateNotification) {
-                         LayoutCubit.get(context).getSearch(fromLoading: true);
+                         LayoutCubit.get(context).getSearch();
                       }
                       return true;
                     },

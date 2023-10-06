@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app1/feature/home/data/models/list_model.dart';
 import 'package:movies_app1/feature/home/data/models/top_rated.dart';
 import 'package:movies_app1/feature/home/presentation/pages/tab/browse_tab.dart';
 import 'package:movies_app1/feature/home/presentation/pages/tab/home_tab.dart';
@@ -22,7 +23,9 @@ class LayoutCubit extends Cubit<LayoutStates> {
   List<Results> searchList = [];
   List<ResultsUpComing> upComingList = [];
   List<ResultsTopRated> topRatedList = [];
+  List<Genres> genresList = [];
   int numPage = 1;
+  int selectedInex = 0;
 
   void changeNav(value) {
     currentIndex = value;
@@ -46,27 +49,16 @@ class LayoutCubit extends Cubit<LayoutStates> {
     });
   }
 
-  void getSearch({bool fromLoading = false, String? name}) async {
-    if (fromLoading) {
-      emit(PaginationLoadingState());
-    } else {
-      emit(SearchLoadingState());
-    }
+  void getSearch({String? name}) async {
+    emit(SearchLoadingState());
+
     var result =
         await homeRepoImpl.getSearch(name: name ?? "", numPage: numPage);
     result.fold((l) {
-      if (fromLoading) {
-        emit(PaginationFailureState(l.message));
-      } else {
-        emit(SearchFailureState(l.message));
-      }
-
+      emit(SearchFailureState(l.message));
     }, (r) {
-      if (r.results!.isNotEmpty) {
-        numPage++;
-        searchList.addAll(r.results!);
-        emit(SearchSuccessesState(r));
-      }
+      searchList = r.results!;
+      emit(SearchSuccessesState(r));
     });
   }
 
@@ -106,5 +98,19 @@ class LayoutCubit extends Cubit<LayoutStates> {
         emit(TopRatedSuccessesState(r));
       }
     });
+  }
+  void changeSource(int index){
+    selectedInex=index;
+    emit(HomeChangeSource());
+  }
+
+  void getGenreList() async {
+    emit(GenresLoadingState());
+    var result = await homeRepoImpl.getGenreList(numPage: numPage);
+    result.fold((l) => emit(GenresFailureState(l.message)),
+        (r) {
+          genresList=r.genres??[];
+          emit(GenresSuccessesState(r));
+        });
   }
 }

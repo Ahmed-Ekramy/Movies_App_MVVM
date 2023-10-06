@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'package:movies_app1/core/failure.dart';
+import 'package:movies_app1/feature/home/data/models/list_model.dart';
 import 'package:movies_app1/feature/home/data/models/top_rated.dart';
 import 'package:movies_app1/feature/home/data/models/upcoming_model.dart';
 
@@ -76,5 +77,21 @@ class HomeRepoImpl extends HomeRepo {
       return left(ServerFailure(e.toString()));
     }
  }
+
+  @override
+  Future<Either<Failures, ListModel>> getGenreList({required int numPage})async {
+    Dio dio= Dio();
+   try {
+      var response = await dio
+          .get("https://api.themoviedb.org/3/genre/movie/list?$apiKey");
+      ListModel listModel=ListModel.fromJson(response.data);
+      return Right(listModel);
+    }catch(e){
+     if (e is DioException) {
+       return left(ServerFailure.fromDiorError(e));
+     }
+     return left(ServerFailure(e.toString()));
+   }
+  }
   }
 

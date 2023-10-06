@@ -16,7 +16,7 @@ class Movies extends StatelessWidget {
           create: (context) => LayoutCubit(HomeRepoImpl())
             ..getPop()
             ..getUpComing()
-            ..topRated(),
+            ..topRated()..getGenreList(),
         )
       ],
       child: MaterialApp(
