@@ -99,7 +99,7 @@ class HomeRepoImpl extends HomeRepo {
   Future<Either<Failures, DiscoverModel>> getDiscover({required int numPage,required int genresId})async {
     Dio dio= Dio();
    try{
-     var response=await dio.get("$baseUrl?$apiKey&with_genres=$genresId&page=$numPage");
+     var response=await dio.get("$baseUrl2/discover/movie?$apiKey&with_genres=$genresId&page=$numPage");
      DiscoverModel discoverModel=DiscoverModel.fromJson(response.data);
      print(discoverModel.results?[0].id);
      return Right(discoverModel);

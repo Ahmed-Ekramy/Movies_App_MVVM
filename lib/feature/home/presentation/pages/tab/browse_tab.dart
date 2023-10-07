@@ -29,7 +29,7 @@ class BrowseTab extends StatelessWidget {
                     child: TabBar(
                       onTap: (value) {
                         LayoutCubit.get(context).
-                        getDiscover(genresId:LayoutCubit.get(context).genresList[0].id);
+                        getDiscover(genresId:LayoutCubit.get(context).genresList[value].id);
                         LayoutCubit.get(context).changeSource(value);
                       },
                       isScrollable: true,
@@ -94,7 +94,7 @@ class DiscoverItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               CachedNetworkImage(
-                imageUrl: discoverList.backdropPath ?? "",
+                imageUrl: "https://image.tmdb.org/t/p/w500${discoverList.backdropPath}",
                 height: 200,
                 placeholder: (context, url) =>
                     Center(child: CircularProgressIndicator()),
