@@ -11,6 +11,17 @@ class HomeLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<LayoutCubit, LayoutStates>(
         listener: (context, state) {
+          if (state is GenresLoadingState) {
+            const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is GenresSuccessesState) {
+            LayoutCubit.get(context).getDiscover();
+          }
+          else if (state is HomeChangeSource) {
+            LayoutCubit.get(context).getDiscover();
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -20,11 +31,12 @@ class HomeLayout extends StatelessWidget {
             bottomNavigationBar: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Container(
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   color: const Color(0x4DDADADA),
-                  border: Border.all(
-                    color: Color(0x40FFFFFF),
-                  ),
+                  // border: Border.all(
+                  //   color: Color(0x40FFFFFF),
+                  // ),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(50),
                     topRight: Radius.circular(50),
@@ -70,13 +82,13 @@ class HomeLayout extends StatelessWidget {
                             size: 30,
                           ),
                           label: ""),
-                      BottomNavigationBarItem(
-                          backgroundColor: Colors.transparent,
-                          icon: Icon(
-                            Icons.bookmark_added,
-                            size: 30,
-                          ),
-                          label: ""),
+                      // BottomNavigationBarItem(
+                      //     backgroundColor: Colors.transparent,
+                      //     icon: Icon(
+                      //       Icons.bookmark_added,
+                      //       size: 30,
+                      //     ),
+                      //     label: ""),
                     ]),
               ),
             ),

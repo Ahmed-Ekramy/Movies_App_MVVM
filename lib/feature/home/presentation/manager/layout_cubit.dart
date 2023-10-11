@@ -34,7 +34,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
     emit(ChangeNavState());
   }
 
-  List<Widget> tabs =  [
+  List<Widget> tabs = [
     const HomeTab(),
     const SearchTab(),
     BrowseTab(),
@@ -101,26 +101,31 @@ class LayoutCubit extends Cubit<LayoutStates> {
       }
     });
   }
-  void changeSource(int index){
-    selectedInex=index;
+
+  void changeSource(int index) {
+    selectedInex = index;
     emit(HomeChangeSource());
   }
 
   void getGenreList() async {
     emit(GenresLoadingState());
     var result = await homeRepoImpl.getGenreList(numPage: numPage);
-    result.fold((l) => emit(GenresFailureState(l.message)),
-        (r) {
-          genresList=r.genres??[];
-          print(genresList[0].id);
-          emit(GenresSuccessesState(r));
-        });
+    result.fold((l) => emit(GenresFailureState(l.message)), (r) {
+      genresList = r.genres ?? [];
+      emit(GenresSuccessesState(r));
+    });
   }
-  void getDiscover({int? genresId})async{
-    var result=await homeRepoImpl.getDiscover(numPage: numPage, genresId: genresId??0);
+
+  void getDiscover() async {
+    emit(DiscoverLoadingState());
+    var result = await homeRepoImpl.getDiscover(
+        numPage: numPage, genresId: genresList[selectedInex].id??0);
     result.fold((l) => emit(DiscoverFailureState(l.message)), (r) {
-      discoverList=r.results!;
+      if (r.results!.isNotEmpty) {
+      numPage++;
+      discoverList=(r.results!);
       emit(DiscoverSuccessesState(r));
+      }
     });
   }
 }

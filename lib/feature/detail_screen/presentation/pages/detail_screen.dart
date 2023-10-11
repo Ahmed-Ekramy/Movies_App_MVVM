@@ -19,152 +19,150 @@ class DetailScreen extends StatelessWidget {
           ..getSimilar(id: id ?? 0),
         child: BlocBuilder<DetailCubit, DetailStates>(
           builder: (context, state) {
-            if (state is DetailSuccessesState) {
-              return Scaffold(
-                body: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.fill,
-                              imageUrl:
-                                  "https://image.tmdb.org/t/p/w500${DetailCubit.get(context).detailModel?.backdropPath}",
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) =>
-                                      const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  Center(child: const Icon(Icons.error)),
+            if (state is DetailLoadingState ||state is SimilarLoadingState) {
+             return Center(child: CircularProgressIndicator());
+            }
+            return Scaffold(
+              body: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.fill,
+                            imageUrl:
+                            "https://image.tmdb.org/t/p/w500${DetailCubit.get(context).detailModel?.backdropPath}",
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                            const Center(
+                              child: CircularProgressIndicator(),
                             ),
+                            errorWidget: (context, url, error) =>
+                                Center(child: const Icon(Icons.error)),
                           ),
-                          Text(
-                            "${DetailCubit.get(context).detailModel?.title}",
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 35,
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(),
-                              const Icon(
-                                Icons.star,
-                                size: 30,
-                                color: Colors.yellow,
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                "${DetailCubit.get(context).detailModel?.voteAverage}",
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                              const Spacer(),
-                              Text(
-                                "${DetailCubit.get(context).detailModel?.releaseDate}",
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            height: 100,
-                            child: ListView.builder(
-                              itemCount: DetailCubit.get(context)
-                                  .detailModel
-                                  ?.genres
-                                  ?.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Container(
-                                  width: 100,
-                                  decoration: const BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: Center(
-                                    child: Text(
-                                      "${DetailCubit.get(context).detailModel?.genres?[index].name}",
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                        ),
+                        Text(
+                          "${DetailCubit.get(context).detailModel?.title}",
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 35,
+                        ),
+                        Row(
+                          children: [
+                            const SizedBox(),
+                            const Icon(
+                              Icons.star,
+                              size: 30,
+                              color: Colors.yellow,
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              "${DetailCubit.get(context).detailModel?.voteAverage}",
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                            const Spacer(),
+                            Text(
+                              "${DetailCubit.get(context).detailModel?.releaseDate}",
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        SizedBox(
+                          height: 100,
+                          child: ListView.builder(
+                            itemCount: DetailCubit.get(context)
+                                .detailModel
+                                ?.genres
+                                ?.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0),
+                              child: Container(
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20))),
+                                child: Center(
+                                  child: Text(
+                                    "${DetailCubit.get(context).detailModel?.genres?[index].name}",
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "${DetailCubit.get(context).detailModel?.overview}",
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          "Related Movies",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          height: 400,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return DetailScreen(
+                                          DetailCubit.get(context)
+                                              .similarList[index]
+                                              .id);
+                                    },
+                                  ));
+                                },
+                                child: SimilarItem(DetailCubit.get(context)
+                                    .similarList[index])),
+                            itemCount:
+                            DetailCubit.get(context).similarList.length,
                           ),
-                          const Text(
-                            "Description",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "${DetailCubit.get(context).detailModel?.overview}",
-                            style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text(
-                            "Related Movies",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 400,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) => InkWell(
-                                  onTap: () {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return DetailScreen(
-                                            DetailCubit.get(context)
-                                                .similarList[index]
-                                                .id);
-                                      },
-                                    ));
-                                  },
-                                  child: SimilarItem(DetailCubit.get(context)
-                                      .similarList[index])),
-                              itemCount:
-                                  DetailCubit.get(context).similarList.length,
-                            ),
-                          )
-                        ]),
-                  ),
+                        )
+                      ]),
                 ),
-              );
-            }
-            return Center(
-              child: CircularProgressIndicator(),
+              ),
             );
           },
         ));
